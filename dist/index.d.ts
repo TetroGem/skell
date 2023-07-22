@@ -1,4 +1,4 @@
-export { Owned, Mutable, Readable, Skell, Type, Closure, $Closure, capture, $capture, Enum } from './skell';
+export { Owned, Mutable, Readable, Skell, Type, Closure, $Closure, capture, $capture, Enum } from './core/skell';
 export { Numbers } from './namespaces/Numbers';
 export { DeepReadonly } from './types/DeepReadonly';
 export { Interface } from './types/Interface';

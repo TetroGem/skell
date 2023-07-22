@@ -1,4 +1,4 @@
-import { DeepReadonly } from './types/DeepReadonly';
+import { DeepReadonly } from '../types/DeepReadonly';
 
 const owned = Symbol('owned');
 const mutable = Symbol('mutable');
