@@ -1,4 +1,4 @@
-import { DeepReadonly } from '../types/DeepReadonly';
+import { Immutable } from '../types/Immutable';
 declare const owned: unique symbol;
 declare const mutable: unique symbol;
 declare const readable: unique symbol;
@@ -9,7 +9,7 @@ export type Mutable<T> = {
     [P in Exclude<keyof T, typeof owned>]: typeof readable extends keyof T[P] ? Mutable<T[P]> : T[P];
 };
 export type Readable<T> = {
-    readonly [P in Exclude<keyof T, typeof owned | typeof mutable | MutableKey<T>>]: typeof readable extends keyof T[P] ? Readable<T[P]> : DeepReadonly<T[P]>;
+    readonly [P in Exclude<keyof T, typeof owned | typeof mutable | MutableKey<T>>]: typeof readable extends keyof T[P] ? Readable<T[P]> : Immutable<T[P]>;
 };
 type MutableKey<T> = {
     [P in keyof T]: P extends `$${infer _}` ? P : P extends '$' ? P : never;
