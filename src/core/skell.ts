@@ -22,7 +22,7 @@ export type Readable<T> = {
         ;
 };
 
-type MutableKey<T> = { [P in keyof T]: P extends `$${infer _}` ? P : P extends '$' ? P : never }[keyof T];
+type MutableKey<T> = { [P in keyof T]: P extends `$${infer _}` ? (P extends '$' ? never : P) : never }[keyof T];
 
 export class Skell<T extends Type<symbol>> {
     public readonly [owned] = true as const;

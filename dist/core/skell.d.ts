@@ -12,7 +12,7 @@ export type Readable<T> = {
     readonly [P in Exclude<keyof T, typeof owned | typeof mutable | MutableKey<T>>]: typeof readable extends keyof T[P] ? Readable<T[P]> : Immutable<T[P]>;
 };
 type MutableKey<T> = {
-    [P in keyof T]: P extends `$${infer _}` ? P : P extends '$' ? P : never;
+    [P in keyof T]: P extends `$${infer _}` ? (P extends '$' ? never : P) : never;
 }[keyof T];
 export declare class Skell<T extends Type<symbol>> {
     readonly [owned]: true;
