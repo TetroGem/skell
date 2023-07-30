@@ -30,10 +30,8 @@ export declare namespace Skell {
 export interface Type<K extends symbol> {
     KIND: K;
 }
-export type Closure<T extends Function> = T & {
-    [mutable]: true;
+export type Closure<T extends Function> = $Closure<T> & {
     [readable]: true;
-    [closure]: true;
 };
 export type $Closure<T extends Function> = T & {
     [mutable]: true;
@@ -44,4 +42,6 @@ export declare function $capture<T extends Function>(fn: T): $Closure<T>;
 export type Enum<T> = {
     [P in keyof T]: T[P];
 }[keyof T];
+export interface AbstractSkell extends Skell<Type<symbol>> {
+}
 export {};

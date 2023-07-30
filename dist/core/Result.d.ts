@@ -1,10 +1,12 @@
 import { Skell, Readable, Mutable, Owned, $Closure } from './skell';
 export declare namespace Result {
     class _Ok<T> extends Skell<typeof Ok> {
-        readonly value: T;
+        value: T;
         readonly isOk: true;
         readonly isError: false;
         constructor(value: T);
+        $setOk(mapper: (value: T) => T): this;
+        mapOk<R>(mapper: (value: T) => R): $$Ok<R>;
     }
     export interface Ok<T> extends Readable<_Ok<T>> {
     }
@@ -22,6 +24,8 @@ export declare namespace Result {
         readonly isOk: false;
         readonly isError: true;
         constructor(error: T);
+        $setOk(): this;
+        mapOk(): $$Bad<T>;
     }
     export interface Bad<T> extends Readable<_Bad<T>> {
     }

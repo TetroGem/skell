@@ -6,9 +6,18 @@ export namespace Result {
         public readonly isError = false as const;
 
         public constructor(
-            public readonly value: T,
+            public value: T,
         ) {
             super(Ok.KIND);
+        }
+
+        public $setOk(mapper: (value: T) => T): this {
+            this.value = mapper(this.value);
+            return this;
+        }
+
+        public mapOk<R>(mapper: (value: T) => R): $$Ok<R> {
+            return Ok.With(mapper(this.value));
         }
     }
 
@@ -34,6 +43,14 @@ export namespace Result {
             public readonly error: T,
         ) {
             super(Bad.KIND);
+        }
+
+        public $setOk(): this {
+            return this;
+        }
+
+        public mapOk(): $$Bad<T> {
+            return Bad.With(this.error);
         }
     }
 

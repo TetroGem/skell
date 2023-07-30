@@ -9,6 +9,13 @@ export var Result;
             super(Ok.KIND);
             this.value = value;
         }
+        $setOk(mapper) {
+            this.value = mapper(this.value);
+            return this;
+        }
+        mapOk(mapper) {
+            return Ok.With(mapper(this.value));
+        }
     }
     let Ok;
     (function (Ok) {
@@ -25,6 +32,12 @@ export var Result;
         constructor(error) {
             super(Bad.KIND);
             this.error = error;
+        }
+        $setOk() {
+            return this;
+        }
+        mapOk() {
+            return Bad.With(this.error);
         }
     }
     let Bad;

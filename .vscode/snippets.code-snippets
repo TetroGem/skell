@@ -1,0 +1,34 @@
+{
+    "Define Skell": {
+        "scope": "typescript",
+        "prefix": "skell",
+        "body": [
+            "class _${2:MySkell} extends Skell<typeof ${2:MySkell}> {",
+            "\tpublic constructor() {",
+            "\t\tsuper(${2:MySkell}.KIND);",
+            "\t}",
+            "}",
+            "",
+            "${1:export }interface ${2:MySkell} extends Readable<_${2:MySkell}> {}",
+            "${1:export }interface $${2:MySkell} extends Mutable<_${2:MySkell}> {}",
+            "${1:export }interface $$${2:MySkell} extends Owned<_${2:MySkell}> {}",
+            "",
+            "export namespace ${2:MySkell} {",
+            "\texport const KIND = Symbol('${2:MySkell}');",
+            "}",
+        ],
+    },
+    "Define Abstract Skell": {
+        "scope": "typescript",
+        "prefix": "abstract",
+        "body": [
+            "interface _${2:MyAbstractSkell} extends AbstractSkell {",
+            "\t",
+            "}",
+            "",
+            "${1:export }interface ${2:MyAbstractSkell} extends Readable<_${2:MyAbstractSkell}> {}",
+            "${1:export }interface $${2:MyAbstractSkell} extends Mutable<_${2:MyAbstractSkell}> {}",
+            "${1:export }interface $$${2:MyAbstractSkell} extends Owned<_${2:MyAbstractSkell}> {}",
+        ],
+    },
+}
