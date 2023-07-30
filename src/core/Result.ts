@@ -19,6 +19,10 @@ export namespace Result {
         public mapOk<R>(mapper: (value: T) => R): $$Ok<R> {
             return Ok.With(mapper(this.value));
         }
+
+        public else(): T {
+            return this.value;
+        }
     }
 
     export interface Ok<T> extends Readable<_Ok<T>> {}
@@ -52,6 +56,10 @@ export namespace Result {
         public mapOk(): $$Bad<T> {
             return Bad.With(this.error);
         }
+
+        public else<const F>(fallback: F): F {
+            return fallback;
+        }
     }
 
     export interface Bad<T> extends Readable<_Bad<T>> {}
@@ -71,6 +79,22 @@ export namespace Result {
     type UnwrapFunction<E> = <S>(result: $$Result<S, E>) => S;
 
     export function $scope<T, E>($exec: $Closure<(unwrap: UnwrapFunction<E>) => $$Result<T, E>>): $$Result<T, E> {
+        const unwrap: UnwrapFunction<E> = result => {
+            if (result.isError) throw result;
+            return result.value;
+        };
+
+        try {
+            const result = $exec(unwrap);
+            return result;
+        } catch (e) {
+            return e as $$Bad<E>;
+        }
+    }
+
+    export async function $asyncScope<T, E>(
+        $exec: $Closure<(unwrap: UnwrapFunction<E>) => Promise<$$Result<T, E>>>,
+    ): Promise<$$Result<T, E>> {
         const unwrap: UnwrapFunction<E> = result => {
             if (result.isError) throw result;
             return result.value;

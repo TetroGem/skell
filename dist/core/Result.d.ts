@@ -7,6 +7,7 @@ export declare namespace Result {
         constructor(value: T);
         $setOk(mapper: (value: T) => T): this;
         mapOk<R>(mapper: (value: T) => R): $$Ok<R>;
+        else(): T;
     }
     export interface Ok<T> extends Readable<_Ok<T>> {
     }
@@ -26,6 +27,7 @@ export declare namespace Result {
         constructor(error: T);
         $setOk(): this;
         mapOk(): $$Bad<T>;
+        else<const F>(fallback: F): F;
     }
     export interface Bad<T> extends Readable<_Bad<T>> {
     }
@@ -40,6 +42,7 @@ export declare namespace Result {
     }
     type UnwrapFunction<E> = <S>(result: $$Result<S, E>) => S;
     export function $scope<T, E>($exec: $Closure<(unwrap: UnwrapFunction<E>) => $$Result<T, E>>): $$Result<T, E>;
+    export function $asyncScope<T, E>($exec: $Closure<(unwrap: UnwrapFunction<E>) => Promise<$$Result<T, E>>>): Promise<$$Result<T, E>>;
     export {};
 }
 export type Result<T, E> = Result.Ok<T> | Result.Bad<E>;

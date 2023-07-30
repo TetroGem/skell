@@ -16,6 +16,9 @@ export var Result;
         mapOk(mapper) {
             return Ok.With(mapper(this.value));
         }
+        else() {
+            return this.value;
+        }
     }
     let Ok;
     (function (Ok) {
@@ -38,6 +41,9 @@ export var Result;
         }
         mapOk() {
             return Bad.With(this.error);
+        }
+        else(fallback) {
+            return fallback;
         }
     }
     let Bad;
@@ -63,4 +69,19 @@ export var Result;
         }
     }
     Result.$scope = $scope;
+    async function $asyncScope($exec) {
+        const unwrap = result => {
+            if (result.isError)
+                throw result;
+            return result.value;
+        };
+        try {
+            const result = $exec(unwrap);
+            return result;
+        }
+        catch (e) {
+            return e;
+        }
+    }
+    Result.$asyncScope = $asyncScope;
 })(Result || (Result = {}));
