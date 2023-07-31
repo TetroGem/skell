@@ -7,7 +7,7 @@ export type $$Result<T, E> = Result.$$Ok<T> | Result.$$Bad<E>;
 export namespace Result {
     class _Ok<T> extends Skell<typeof Ok> {
         public readonly isOk = true as const;
-        public readonly isError = false as const;
+        public readonly isBad = false as const;
 
         public constructor(
             public value: T,
@@ -45,7 +45,7 @@ export namespace Result {
 
     class _Bad<T> extends Skell<typeof Bad> {
         public readonly isOk = false as const;
-        public readonly isError = true as const;
+        public readonly isBad = true as const;
 
         public constructor(
             public readonly error: T,
@@ -80,11 +80,11 @@ export namespace Result {
         }
     }
 
-    type UnwrapFunction<E> = <S>(result: $$Result<S, E>) => S;
+    type Unwrap<E> = <S>(result: $$Result<S, E>) => S;
 
-    export function $scope<T, E>($exec: $Closure<(unwrap: UnwrapFunction<E>) => $$Result<T, E>>): $$Result<T, E> {
-        const unwrap: UnwrapFunction<E> = result => {
-            if (result.isError) throw result;
+    export function $scope<T, E>($exec: $Closure<(unwrap: Unwrap<E>) => $$Result<T, E>>): $$Result<T, E> {
+        const unwrap: Unwrap<E> = result => {
+            if (result.isBad) throw result;
             return result.value;
         };
 
@@ -97,10 +97,10 @@ export namespace Result {
     }
 
     export async function $asyncScope<T, E>(
-        $exec: $Closure<(unwrap: UnwrapFunction<E>) => Promise<$$Result<T, E>>>,
+        $exec: $Closure<(unwrap: Unwrap<E>) => Promise<$$Result<T, E>>>,
     ): Promise<$$Result<T, E>> {
-        const unwrap: UnwrapFunction<E> = result => {
-            if (result.isError) throw result;
+        const unwrap: Unwrap<E> = result => {
+            if (result.isBad) throw result;
             return result.value;
         };
 
