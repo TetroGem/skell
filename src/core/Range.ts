@@ -110,9 +110,15 @@ class _Range extends Skell<typeof Range> {
         }
     }
 
-    public random(): number {
+    public randomStep(): number {
         const { first, last, step } = this;
         return (Math.floor((Math.random() * ((last + step) - first)) / step) * step) + first;
+    }
+
+    public randomEpsilon(): number {
+        const { first, last } = this;
+        const range = (last + (first < last ? Number.EPSILON : -Number.EPSILON)) - first;
+        return Math.random() * range + first;
     }
 
     public includes(num: number): boolean {

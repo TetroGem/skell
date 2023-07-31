@@ -143,11 +143,11 @@ describe("Range", () => {
         expectNextDone(iterator);
     });
 
-    it("Random from 0=..10", () => {
+    it("Random Step from 0=..10", () => {
         const range = Range.InEx(0, 10);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
-            const roll = range.random();
+            const roll = range.randomStep();
             rolls[roll] ??= 0;
             rolls[roll]++;
             expect([0, 1, 2, 3, 4, 5, 6, 7, 8, 9].includes(roll)).toBe(true);
@@ -155,11 +155,11 @@ describe("Range", () => {
         console.log(rolls);
     });
 
-    it("Random from 0=..=10", () => {
+    it("Random Step from 0=..=10", () => {
         const range = Range.InIn(0, 10);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
-            const roll = range.random();
+            const roll = range.randomStep();
             rolls[roll] ??= 0;
             rolls[roll]++;
             expect([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(roll)).toBe(true);
@@ -167,11 +167,11 @@ describe("Range", () => {
         console.log(rolls);
     });
 
-    it("Random from 0=..=10:2", () => {
+    it("Random Step from 0=..=10:2", () => {
         const range = Range.InIn(0, 10, 2);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
-            const roll = range.random();
+            const roll = range.randomStep();
             rolls[roll] ??= 0;
             rolls[roll]++;
             expect([0, 2, 4, 6, 8, 10].includes(roll)).toBe(true);
@@ -179,11 +179,11 @@ describe("Range", () => {
         console.log(rolls);
     });
 
-    it("Random from 0=..=10:1.5", () => {
+    it("Random Step from 0=..=10:1.5", () => {
         const range = Range.InIn(0, 10, 1.5);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
-            const roll = range.random();
+            const roll = range.randomStep();
             rolls[roll] ??= 0;
             rolls[roll]++;
             expect([0, 1.5, 3, 4.5, 6, 7.5, 9].includes(roll)).toBe(true);
@@ -191,11 +191,11 @@ describe("Range", () => {
         console.log(rolls);
     });
 
-    it("Random from 0..=10:1.5", () => {
+    it("Random Step from 0..=10:1.5", () => {
         const range = Range.ExIn(0, 10, 1.5);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
-            const roll = range.random();
+            const roll = range.randomStep();
             rolls[roll] ??= 0;
             rolls[roll]++;
             expect([1.5, 3, 4.5, 6, 7.5, 9].includes(roll)).toBe(true);
@@ -203,11 +203,11 @@ describe("Range", () => {
         console.log(rolls);
     });
 
-    it("Random from 1=..=10:1.5", () => {
+    it("Random Step from 1=..=10:1.5", () => {
         const range = Range.InIn(1, 10, 1.5);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
-            const roll = range.random();
+            const roll = range.randomStep();
             rolls[roll] ??= 0;
             rolls[roll]++;
             expect([1, 2.5, 4, 5.5, 7, 8.5, 10].includes(roll)).toBe(true);
@@ -215,11 +215,29 @@ describe("Range", () => {
         console.log(rolls);
     });
 
-    it("Random from 0=..1", () => {
+    it("Random Step from 0=..1", () => {
         const range = Range.InEx(0, 1);
         for (let i = 0; i < 1000; i++) {
-            const roll = range.random();
+            const roll = range.randomStep();
             expect(roll).toBe(0);
+        }
+    });
+
+    it("Random Epsilon from 0=..10", () => {
+        const range = Range.InEx(0, 10);
+        for (let i = 0; i < 1000; i++) {
+            const roll = range.randomEpsilon();
+            expect(roll).toBeGreaterThanOrEqual(0);
+            expect(roll).toBeLessThan(10);
+        }
+    });
+
+    it("Random Epsilon from 0=..=10", () => {
+        const range = Range.InIn(0, 10);
+        for (let i = 0; i < 1000; i++) {
+            const roll = range.randomEpsilon();
+            expect(roll).toBeGreaterThanOrEqual(0);
+            expect(roll).toBeLessThanOrEqual(10);
         }
     });
 

@@ -23,7 +23,8 @@ declare class _Range extends Skell<typeof Range> {
     get first(): number;
     get last(): number;
     [Symbol.iterator](): Generator<number, void, unknown>;
-    random(): number;
+    randomStep(): number;
+    randomEpsilon(): number;
     includes(num: number): boolean;
 }
 export interface Range extends Readable<_Range> {

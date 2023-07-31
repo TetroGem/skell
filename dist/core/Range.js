@@ -97,9 +97,14 @@ class _Range extends Skell {
             yield i;
         }
     }
-    random() {
+    randomStep() {
         const { first, last, step } = this;
         return (Math.floor((Math.random() * ((last + step) - first)) / step) * step) + first;
+    }
+    randomEpsilon() {
+        const { first, last } = this;
+        const range = (last + (first < last ? Number.EPSILON : -Number.EPSILON)) - first;
+        return Math.random() * range + first;
     }
     includes(num) {
         const { first, last, step } = this;
