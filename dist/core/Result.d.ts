@@ -6,7 +6,7 @@ export declare namespace Result {
     class _Ok<T> extends Skell<typeof Ok> {
         value: T;
         readonly isOk: true;
-        readonly isError: false;
+        readonly isBad: false;
         constructor(value: T);
         $setOk(mapper: (value: T) => T): this;
         mapOk<R>(mapper: (value: T) => R): $$Ok<R>;
@@ -26,7 +26,7 @@ export declare namespace Result {
     class _Bad<T> extends Skell<typeof Bad> {
         readonly error: T;
         readonly isOk: false;
-        readonly isError: true;
+        readonly isBad: true;
         constructor(error: T);
         $setOk(): this;
         mapOk(): $$Bad<T>;
@@ -43,8 +43,8 @@ export declare namespace Result {
         function With(): $$Bad<void>;
         function With<T>(value: T): $$Bad<T>;
     }
-    type UnwrapFunction<E> = <S>(result: $$Result<S, E>) => S;
-    export function $scope<T, E>($exec: $Closure<(unwrap: UnwrapFunction<E>) => $$Result<T, E>>): $$Result<T, E>;
-    export function $asyncScope<T, E>($exec: $Closure<(unwrap: UnwrapFunction<E>) => Promise<$$Result<T, E>>>): Promise<$$Result<T, E>>;
+    type Unwrap<E> = <S>(result: $$Result<S, E>) => S;
+    export function $scope<T, E>($exec: $Closure<(unwrap: Unwrap<E>) => $$Result<T, E>>): $$Result<T, E>;
+    export function $asyncScope<T, E>($exec: $Closure<(unwrap: Unwrap<E>) => Promise<$$Result<T, E>>>): Promise<$$Result<T, E>>;
     export {};
 }

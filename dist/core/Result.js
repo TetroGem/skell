@@ -4,7 +4,7 @@ export var Result;
     class _Ok extends Skell {
         value;
         isOk = true;
-        isError = false;
+        isBad = false;
         constructor(value) {
             super(Ok.KIND);
             this.value = value;
@@ -31,7 +31,7 @@ export var Result;
     class _Bad extends Skell {
         error;
         isOk = false;
-        isError = true;
+        isBad = true;
         constructor(error) {
             super(Bad.KIND);
             this.error = error;
@@ -56,7 +56,7 @@ export var Result;
     })(Bad = Result.Bad || (Result.Bad = {}));
     function $scope($exec) {
         const unwrap = result => {
-            if (result.isError)
+            if (result.isBad)
                 throw result;
             return result.value;
         };
@@ -71,7 +71,7 @@ export var Result;
     Result.$scope = $scope;
     async function $asyncScope($exec) {
         const unwrap = result => {
-            if (result.isError)
+            if (result.isBad)
                 throw result;
             return result.value;
         };
