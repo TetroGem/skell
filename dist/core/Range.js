@@ -49,6 +49,34 @@ class _Range extends Skell {
         this._maxIsInclusive = false;
         return this;
     }
+    $inIn(inclusiveMin, inclusiveMax, step) {
+        this.$inMin(inclusiveMin);
+        this.$inMax(inclusiveMax);
+        if (step !== undefined)
+            this.$step(step);
+        return this;
+    }
+    $exEx(exclusiveMin, exclusiveMax, step) {
+        this.$exMin(exclusiveMin);
+        this.$exMax(exclusiveMax);
+        if (step !== undefined)
+            this.$step(step);
+        return this;
+    }
+    $inEx(inclusiveMin, exclusiveMax, step) {
+        this.$inMin(inclusiveMin);
+        this.$exMax(exclusiveMax);
+        if (step !== undefined)
+            this.$step(step);
+        return this;
+    }
+    $exIn(exclusiveMin, inclusiveMax, step) {
+        this.$exMin(exclusiveMin);
+        this.$inMax(inclusiveMax);
+        if (step !== undefined)
+            this.$step(step);
+        return this;
+    }
     $step(step) {
         this._step = step;
         return this;
@@ -90,4 +118,20 @@ export var Range;
         return new _Range(0, true, 1, false, 1);
     }
     Range.New = New;
+    function InIn(inclusiveMin, inclusiveMax, step) {
+        return New().$inIn(inclusiveMin, inclusiveMax, step);
+    }
+    Range.InIn = InIn;
+    function ExEx(exclusiveMin, exclusiveMax, step) {
+        return New().$exEx(exclusiveMin, exclusiveMax, step);
+    }
+    Range.ExEx = ExEx;
+    function InEx(inclusiveMin, exclusiveMax, step) {
+        return New().$inEx(inclusiveMin, exclusiveMax, step);
+    }
+    Range.InEx = InEx;
+    function ExIn(exclusiveMin, inclusiveMax, step) {
+        return New().$exIn(exclusiveMin, inclusiveMax, step);
+    }
+    Range.ExIn = ExIn;
 })(Range || (Range = {}));

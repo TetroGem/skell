@@ -1,4 +1,4 @@
-import { Range } from '../core/Range';
+import { Range } from '../src/core/Range';
 
 function expectNextValue<T>(iterator: Iterator<T>, value: T): void {
     const result = iterator.next();
@@ -18,7 +18,7 @@ function expectNextDone(iterator: Iterator<unknown>): void {
 
 describe("Range", () => {
     it("Range 0=..10", () => {
-        const range = Range.New().$inMin(0).$exMax(10);
+        const range = Range.InEx(0, 10);
         expect(range.min).toBe(0);
         expect(range.max).toBe(10);
         expect(range.minIsInclusive).toBe(true);
@@ -32,7 +32,7 @@ describe("Range", () => {
     });
 
     it("Range 0=..=10", () => {
-        const range = Range.New().$inMin(0).$inMax(10);
+        const range = Range.InIn(0, 10);
         expect(range.min).toBe(0);
         expect(range.max).toBe(10);
         expect(range.minIsInclusive).toBe(true);
@@ -46,7 +46,7 @@ describe("Range", () => {
     });
 
     it("Range 0..=10", () => {
-        const range = Range.New().$exMin(0).$inMax(10);
+        const range = Range.ExIn(0, 10);
         expect(range.min).toBe(0);
         expect(range.max).toBe(10);
         expect(range.minIsInclusive).toBe(false);
@@ -60,7 +60,7 @@ describe("Range", () => {
     });
 
     it("Range 0..10", () => {
-        const range = Range.New().$exMin(0).$exMax(10);
+        const range = Range.ExEx(0, 10);
         expect(range.min).toBe(0);
         expect(range.max).toBe(10);
         expect(range.minIsInclusive).toBe(false);
@@ -74,7 +74,7 @@ describe("Range", () => {
     });
 
     it("Range 1.5=..=6.5", () => {
-        const range = Range.New().$inMin(1.5).$inMax(6.5);
+        const range = Range.InIn(1.5, 6.5);
         expect(range.min).toBe(1.5);
         expect(range.max).toBe(6.5);
         expect(range.minIsInclusive).toBe(true);
@@ -88,7 +88,7 @@ describe("Range", () => {
     });
 
     it("Range 0=..11:2", () => {
-        const range = Range.New().$inMin(0).$exMax(11).$step(2);
+        const range = Range.InEx(0, 11, 2);
         expect(range.min).toBe(0);
         expect(range.max).toBe(11);
         expect(range.minIsInclusive).toBe(true);
@@ -102,7 +102,7 @@ describe("Range", () => {
     });
 
     it("Range 0=..=11:2", () => {
-        const range = Range.New().$inMin(0).$inMax(11).$step(2);
+        const range = Range.InIn(0, 11, 2);
         expect(range.min).toBe(0);
         expect(range.max).toBe(11);
         expect(range.minIsInclusive).toBe(true);
@@ -116,7 +116,7 @@ describe("Range", () => {
     });
 
     it("Range 0=..=14:3", () => {
-        const range = Range.New().$inMin(0).$inMax(14).$step(3);
+        const range = Range.InIn(0, 14, 3);
         expect(range.min).toBe(0);
         expect(range.max).toBe(14);
         expect(range.minIsInclusive).toBe(true);
@@ -130,7 +130,7 @@ describe("Range", () => {
     });
 
     it("Range 0=..14:3", () => {
-        const range = Range.New().$inMin(0).$exMax(14).$step(3);
+        const range = Range.InEx(0, 14, 3);
         expect(range.min).toBe(0);
         expect(range.max).toBe(14);
         expect(range.minIsInclusive).toBe(true);
@@ -144,7 +144,7 @@ describe("Range", () => {
     });
 
     it("Random from 0=..10", () => {
-        const range = Range.New().$inMin(0).$exMax(10);
+        const range = Range.InEx(0, 10);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
             const roll = range.random();
@@ -156,7 +156,7 @@ describe("Range", () => {
     });
 
     it("Random from 0=..=10", () => {
-        const range = Range.New().$inMin(0).$inMax(10);
+        const range = Range.InIn(0, 10);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
             const roll = range.random();
@@ -168,7 +168,7 @@ describe("Range", () => {
     });
 
     it("Random from 0=..=10:2", () => {
-        const range = Range.New().$inMin(0).$inMax(10).$step(2);
+        const range = Range.InIn(0, 10, 2);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
             const roll = range.random();
@@ -180,7 +180,7 @@ describe("Range", () => {
     });
 
     it("Random from 0=..=10:1.5", () => {
-        const range = Range.New().$inMin(0).$inMax(10).$step(1.5);
+        const range = Range.InIn(0, 10, 1.5);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
             const roll = range.random();
@@ -192,7 +192,7 @@ describe("Range", () => {
     });
 
     it("Random from 0..=10:1.5", () => {
-        const range = Range.New().$exMin(0).$inMax(10).$step(1.5);
+        const range = Range.ExIn(0, 10, 1.5);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
             const roll = range.random();
@@ -204,7 +204,7 @@ describe("Range", () => {
     });
 
     it("Random from 1=..=10:1.5", () => {
-        const range = Range.New().$inMin(1).$inMax(10).$step(1.5);
+        const range = Range.InIn(1, 10, 1.5);
         const rolls: number[] = [];
         for (let i = 0; i < 1000; i++) {
             const roll = range.random();
@@ -216,7 +216,7 @@ describe("Range", () => {
     });
 
     it("Random from 0=..1", () => {
-        const range = Range.New().$inMin(0).$exMax(1);
+        const range = Range.InEx(0, 1);
         for (let i = 0; i < 1000; i++) {
             const roll = range.random();
             expect(roll).toBe(0);
@@ -224,7 +224,7 @@ describe("Range", () => {
     });
 
     it("Includes in 0=..10", () => {
-        const range = Range.New().$inMin(0).$exMax(10);
+        const range = Range.InEx(0, 10);
         for (const inValue of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
             expect(range.includes(inValue)).toBe(true);
         }
@@ -234,7 +234,7 @@ describe("Range", () => {
     });
 
     it("Includes in 1.5..=10:1.5", () => {
-        const range = Range.New().$exMin(1.5).$inMax(10).$step(1.5);
+        const range = Range.ExIn(1.5, 10, 1.5);
         for (const inValue of [3, 4.5, 6, 7.5, 9]) {
             expect(range.includes(inValue)).toBe(true);
         }

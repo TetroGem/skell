@@ -56,6 +56,34 @@ class _Range extends Skell<typeof Range> {
         return this;
     }
 
+    public $inIn(inclusiveMin: number, inclusiveMax: number, step?: number): this {
+        this.$inMin(inclusiveMin);
+        this.$inMax(inclusiveMax);
+        if (step !== undefined) this.$step(step);
+        return this;
+    }
+
+    public $exEx(exclusiveMin: number, exclusiveMax: number, step?: number): this {
+        this.$exMin(exclusiveMin);
+        this.$exMax(exclusiveMax);
+        if (step !== undefined) this.$step(step);
+        return this;
+    }
+
+    public $inEx(inclusiveMin: number, exclusiveMax: number, step?: number): this {
+        this.$inMin(inclusiveMin);
+        this.$exMax(exclusiveMax);
+        if (step !== undefined) this.$step(step);
+        return this;
+    }
+
+    public $exIn(exclusiveMin: number, inclusiveMax: number, step?: number): this {
+        this.$exMin(exclusiveMin);
+        this.$inMax(inclusiveMax);
+        if (step !== undefined) this.$step(step);
+        return this;
+    }
+
     public $step(step: number): this {
         this._step = step;
         return this;
@@ -107,5 +135,21 @@ export namespace Range {
 
     export function New(): $$Range {
         return new _Range(0, true, 1, false, 1);
+    }
+
+    export function InIn(inclusiveMin: number, inclusiveMax: number, step?: number): $$Range {
+        return New().$inIn(inclusiveMin, inclusiveMax, step);
+    }
+
+    export function ExEx(exclusiveMin: number, exclusiveMax: number, step?: number): $$Range {
+        return New().$exEx(exclusiveMin, exclusiveMax, step);
+    }
+
+    export function InEx(inclusiveMin: number, exclusiveMax: number, step?: number): $$Range {
+        return New().$inEx(inclusiveMin, exclusiveMax, step);
+    }
+
+    export function ExIn(exclusiveMin: number, inclusiveMax: number, step?: number): $$Range {
+        return New().$exIn(exclusiveMin, inclusiveMax, step);
     }
 }
