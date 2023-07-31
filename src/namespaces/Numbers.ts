@@ -42,6 +42,10 @@ export namespace Numbers {
             return divisor === 0 ? Bad(DivideByZeroCause.Def) : Ok(dividend / divisor);
         }
 
+        export function safeModulo(dividend: number, divisor: number): $$Result<number, DivideByZeroCause> {
+            return divisor === 0 ? Bad(DivideByZeroCause.Def) : Ok(dividend % divisor);
+        }
+
         export function map(
             inNum: number, inMin: number, inMax: number, outMin: number, outMax: number,
         ): $$Result<number, DivideByZeroCause> {
@@ -90,6 +94,10 @@ export namespace Numbers {
             return divisor === 0 ? ifZeroDivisor : dividend / divisor;
         }
 
+        export function safeModulo<T>(dividend: number, divisor: number, ifZeroDivisor: T): number | T {
+            return divisor === 0 ? ifZeroDivisor : dividend % divisor;
+        }
+
         export function map<T>(
             inNum: number, inMin: number, inMax: number, outMin: number, outMax: number, ifZeroRange: T,
         ): number | T {
@@ -103,7 +111,9 @@ export namespace Numbers {
         export function constrainMap<T>(
             inNum: number, inMin: number, inMax: number, outMin: number, outMax: number, ifZeroRange: T,
         ): number | T {
-            return map(inNum, inMin, inMax, outMin, outMax, ifZeroRange);
+            const mapped = map(inNum, inMin, inMax, outMin, outMax, null);
+            if (mapped === null) return ifZeroRange;
+            return constrain(mapped, outMin, outMax);
         }
 
         export function parseFloat<T>(source: string, ifNaN: T): number | T {

@@ -1,5 +1,9 @@
 import { Skell, Readable, Mutable, Owned, $Closure } from './skell';
 
+export type Result<T, E> = Result.Ok<T> | Result.Bad<E>;
+export type $Result<T, E> = Result.$Ok<T> | Result.$Bad<E>;
+export type $$Result<T, E> = Result.$$Ok<T> | Result.$$Bad<E>;
+
 export namespace Result {
     class _Ok<T> extends Skell<typeof Ok> {
         public readonly isOk = true as const;
@@ -20,7 +24,7 @@ export namespace Result {
             return Ok.With(mapper(this.value));
         }
 
-        public else(): T {
+        public orElse(): T {
             return this.value;
         }
     }
@@ -57,7 +61,7 @@ export namespace Result {
             return Bad.With(this.error);
         }
 
-        public else<const F>(fallback: F): F {
+        public orElse<const F>(fallback: F): F {
             return fallback;
         }
     }
@@ -108,7 +112,3 @@ export namespace Result {
         }
     }
 }
-
-export type Result<T, E> = Result.Ok<T> | Result.Bad<E>;
-export type $Result<T, E> = Result.$Ok<T> | Result.$Bad<E>;
-export type $$Result<T, E> = Result.$$Ok<T> | Result.$$Bad<E>;
