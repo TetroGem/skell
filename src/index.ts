@@ -1,9 +1,12 @@
 export { Owned, Mutable, Readable, Skell, Type, Closure, $Closure, capture, $capture, Enum, AbstractSkell } from './core/skell';
+export { List, $List, $$List } from './core/List';
+export { Optional, $Optional, $$Optional } from './core/Optional';
+export { Range, $Range, $$Range } from './core/Range';
 export { Result, $Result, $$Result } from './core/Result';
 export { Vector2, $Vector2, $$Vector2 } from './core/Vector2';
-export { Ok, Bad } from './core/shorthands';
+export { Ok, Bad, Present, Empty } from './core/shorthands';
 export { Numbers } from './namespaces/Numbers';
-export { Immutable as DeepReadonly } from './types/Immutable';
+export { Immutable } from './types/Immutable';
+export { Indexed } from './types/Indexed';
 export { Interface } from './types/Interface';
 export { Prettify } from './types/Prettify';
-export { Indexed } from './types/Indexed';
