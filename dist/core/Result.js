@@ -16,7 +16,7 @@ export var Result;
         mapOk(mapper) {
             return Ok.With(mapper(this.value));
         }
-        else() {
+        orElse() {
             return this.value;
         }
     }
@@ -42,7 +42,7 @@ export var Result;
         mapOk() {
             return Bad.With(this.error);
         }
-        else(fallback) {
+        orElse(fallback) {
             return fallback;
         }
     }

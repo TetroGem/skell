@@ -14,6 +14,7 @@ export declare namespace Numbers {
     };
     export namespace Results {
         function safeDivide(dividend: number, divisor: number): $$Result<number, DivideByZeroCause>;
+        function safeModulo(dividend: number, divisor: number): $$Result<number, DivideByZeroCause>;
         function map(inNum: number, inMin: number, inMax: number, outMin: number, outMax: number): $$Result<number, DivideByZeroCause>;
         function constrainMap(inNum: number, inMin: number, inMax: number, outMin: number, outMax: number): $$Result<number, DivideByZeroCause>;
         function parseFloat(source: string): $$Result<number, NaNCause>;
@@ -23,6 +24,7 @@ export declare namespace Numbers {
     }
     export namespace Quick {
         function safeDivide<T>(dividend: number, divisor: number, ifZeroDivisor: T): number | T;
+        function safeModulo<T>(dividend: number, divisor: number, ifZeroDivisor: T): number | T;
         function map<T>(inNum: number, inMin: number, inMax: number, outMin: number, outMax: number, ifZeroRange: T): number | T;
         function constrainMap<T>(inNum: number, inMin: number, inMax: number, outMin: number, outMax: number, ifZeroRange: T): number | T;
         function parseFloat<T>(source: string, ifNaN: T): number | T;

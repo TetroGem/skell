@@ -35,6 +35,10 @@ export var Numbers;
             return divisor === 0 ? Bad(DivideByZeroCause.Def) : Ok(dividend / divisor);
         }
         Results.safeDivide = safeDivide;
+        function safeModulo(dividend, divisor) {
+            return divisor === 0 ? Bad(DivideByZeroCause.Def) : Ok(dividend % divisor);
+        }
+        Results.safeModulo = safeModulo;
         function map(inNum, inMin, inMax, outMin, outMax) {
             return Result.$scope(capture(unwrap => {
                 const inRange = inMax - inMin;
@@ -86,6 +90,10 @@ export var Numbers;
             return divisor === 0 ? ifZeroDivisor : dividend / divisor;
         }
         Quick.safeDivide = safeDivide;
+        function safeModulo(dividend, divisor, ifZeroDivisor) {
+            return divisor === 0 ? ifZeroDivisor : dividend % divisor;
+        }
+        Quick.safeModulo = safeModulo;
         function map(inNum, inMin, inMax, outMin, outMax, ifZeroRange) {
             const inRange = inMax - inMin;
             if (inRange === 0)
@@ -96,7 +104,10 @@ export var Numbers;
         }
         Quick.map = map;
         function constrainMap(inNum, inMin, inMax, outMin, outMax, ifZeroRange) {
-            return map(inNum, inMin, inMax, outMin, outMax, ifZeroRange);
+            const mapped = map(inNum, inMin, inMax, outMin, outMax, null);
+            if (mapped === null)
+                return ifZeroRange;
+            return constrain(mapped, outMin, outMax);
         }
         Quick.constrainMap = constrainMap;
         function parseFloat(source, ifNaN) {
