@@ -4,7 +4,7 @@ import { Empty, Present } from '../src/core/shorthands';
 import { Checkers } from './Checkers';
 import { expectNextDone, expectNextValues } from './expect-iterator';
 import { TupleList } from '../src/core/TupleList';
-import { $$Tie, span, tie, Tie } from '../src/core/skell';
+import { Tie, span, tie } from '../src/core/skell';
 import { Optional } from '../src';
 
 describe("List", () => {
@@ -63,11 +63,8 @@ describe("List", () => {
         expectNextValues(list.denseIteratorLow(null), span (50, null, 100, 200, null, 300));
         expectNextValues(
             list.sparseEntryIterator(TupleList.With(tie (-1 as number, 0 as number))),
-            span<$$Tie<[number, number]>> (tie (0, 50), tie (2, 100), tie (3, 200), tie (5, 300)),
-            (a, b) => {
-                const bTuple = TupleList.Using(b);
-                return Checkers.objectIs(a.at(0), bTuple.at(0)) && Checkers.objectIs(a.at(1), bTuple.at(1))
-            },
+            span<Tie<[number, number]>> (tie (0, 50), tie (2, 100), tie (3, 200), tie (5, 300)),
+            (a, b) => Checkers.objectIs(a.at(0), b[0]) && Checkers.objectIs(a.at(1), b[1]),
         );
     });
 

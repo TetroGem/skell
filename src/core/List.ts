@@ -132,6 +132,23 @@ class _List<T> extends Skell<typeof List> {
         }
         return this;
     }
+
+    public $clear(): this {
+        this.array.length = 0;
+        return this;
+    }
+
+    public toReversed(dest: $List<T>): $List<T> {
+        dest.$clear();
+        dest.$pushMany(this);
+        dest.$reverse();
+        return dest;
+    }
+
+    public $reverse(): this {
+        this.array.reverse();
+        return this;
+    }
 }
 
 export interface List<T> extends Readable<_List<T>> {}

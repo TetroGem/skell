@@ -8,24 +8,27 @@ const readable = Symbol('readable');
 const kind = Symbol('kind');
 declare const closure: unique symbol;
 declare const assign: unique symbol;
+declare const access: unique symbol;
 
-export type AssignFix<T> = T & { [assign]?: { [P in keyof T]?: (value: T[P]) => void } };
+type AssignFix<T> = T & { [assign]?: { [P in keyof T]?: (value: T[P]) => void } };
+type AccessFix<T> = T & { [access]?: { [P in keyof T]?: () => T[P] } };
+type GetSetFix<T> = AccessFix<T> & AssignFix<T>;
 
-export type Owned<T> = AssignFix<Exclude<T, typeof assign>>;
+export type Owned<T> = GetSetFix<Exclude<T, typeof assign>>;
 
-export type Mutable<T> = AssignFix<{
+export type Mutable<T> = GetSetFix<{
     [P in Exclude<keyof T, typeof owned | typeof assign | typeof assign>]: typeof readable extends keyof T[P]
         ? Mutable<T[P]>
         : T[P]
         ;
 }>;
 
-export type Readable<T> = {
+export type Readable<T> = AccessFix<{
     readonly [P in Exclude<keyof T, typeof owned | typeof assign | typeof mutable | MutableKey<T>>]: typeof readable extends keyof T[P]
         ? Readable<T[P]>
         : Immutable<T[P]>
         ;
-};
+}>;
 
 type MutableKey<T> = { [P in keyof T]: P extends `$${infer _}` ? (P extends '$' ? never : P) : never }[keyof T];
 
@@ -73,29 +76,18 @@ declare const spanned: unique symbol;
 //     { [Symbol.iterator]: T[][typeof Symbol.iterator], length: number }
 //     & { [spanned]: T, [owned]: true, [mutable]: true, [readable]: true };
 
-type _Span<T> =
-    readonly T[]
-    & { [spanned]: T, [owned]: true, [mutable]: true, [readable]: true };
-
-export interface Span<T> extends Readable<_Span<T>> {}
-export interface $Span<T> extends Mutable<_Span<T>> {}
-export interface $$Span<T> extends Owned<_Span<T>> {}
+export type Span<T> = AccessFix<readonly T[] & { [spanned]: true }>;
 
 type MutableOnlyArrayKey = Exclude<keyof any[], keyof readonly any[]>;
 declare const tied: unique symbol;
-type _Tie<T extends readonly any[]> = Readonly<T>
-    & { [tied]: T, [owned]: true, [mutable]: true, [readable]: true }
+export type Tie<T extends readonly any[]> = AccessFix<Omit<Readonly<T> & { [tied]: true }, number> & Iterable<T[number]>>;
 
-export type Tie<T extends readonly any[]> = Readable<_Tie<T>>;
-export type $Tie<T extends readonly any[]> = Mutable<_Tie<T>>;
-export type $$Tie<T extends readonly any[]> = Owned<_Tie<T>>;
-
-export function span<T>(...elements: T[]): $$Span<T> {
-    return elements as unknown as $$Span<T>;
+export function span<T>(...elements: T[]): Span<T> {
+    return elements as unknown as Span<T>;
 }
 
-export function tie<T extends readonly any[]>(...elements: T): $$Tie<Mutify<T>> {
-    return elements as unknown as $$Tie<Mutify<T>>;
+export function tie<T extends readonly any[]>(...elements: T): Tie<Mutify<T>> {
+    return elements as unknown as Tie<Mutify<T>>;
 }
 
 declare global {

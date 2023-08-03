@@ -1,8 +1,8 @@
 import { Indexed } from '../types/Indexed';
 import { Indices } from '../types/Indices';
-import { Skell, Readable, Mutable, Owned, $$Tie, Tie } from './skell';
+import { Skell, Readable, Mutable, Owned, Tie } from './skell';
 
-class _TupleList<T extends any[]> extends Skell<typeof TupleList> {
+class _TupleList<T extends readonly any[]> extends Skell<typeof TupleList> {
     public constructor(
         private readonly elements: T,
     ) {
@@ -17,7 +17,7 @@ class _TupleList<T extends any[]> extends Skell<typeof TupleList> {
         const previous = this.elements[index];
         this.elements[index] = value;
         return previous;
-}
+    }
 
     public indexOf<V extends T[Indices<T>], const F>(
         value: V, ifNotFound: F,
@@ -27,9 +27,9 @@ class _TupleList<T extends any[]> extends Skell<typeof TupleList> {
     }
 }
 
-export interface TupleList<T extends any[]> extends Readable<_TupleList<T>> {}
-export interface $TupleList<T extends any[]> extends Mutable<_TupleList<T>> {}
-export interface $$TupleList<T extends any[]> extends Owned<_TupleList<T>> {}
+export interface TupleList<T extends readonly any[]> extends Readable<_TupleList<T>> {}
+export interface $TupleList<T extends readonly any[]> extends Mutable<_TupleList<T>> {}
+export interface $$TupleList<T extends readonly any[]> extends Owned<_TupleList<T>> {}
 
 export namespace TupleList {
     export const KIND = Symbol('TupleList');
@@ -38,7 +38,7 @@ export namespace TupleList {
         return new _TupleList([...elements as any]) as any;
     }
 
-    export function Using<A extends any[]>(elements: $$Tie<A>): $$TupleList<A> {
+    export function Using<A extends any[]>(elements: Tie<A>): $$TupleList<A> {
         return new _TupleList(elements as any) as any;
     }
 }

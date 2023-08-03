@@ -1,7 +1,7 @@
 import { Indices } from '../types/Indices';
-import { Span, Tie, tie } from './Collection';
-import { List } from './List';
-import { $$TupleList, $TupleList, TupleList } from './TupleList';
+import { $List, List } from './List';
+import { $TupleList, TupleList } from './TupleList';
+import { Span, Tie } from './skell';
 
 export namespace Iterators {
     export function range(end: number): IterableIterator<number>;
@@ -15,12 +15,12 @@ export namespace Iterators {
         }
     }
 
-    export function* enumerate<T>(
+    export function* enumerate<T, I>(
         iterable: Iterable<T>,
-        dest: $TupleList<[T, number]>,
+        dest: $TupleList<[T, number | I]>,
         startIndex: number = 0,
         indexStep: number = 1,
-    ): IterableIterator<TupleList<[T, number]>> {
+    ): IterableIterator<TupleList<[T, number | I]>> {
         let index = startIndex;
         for (const next of iterable) {
             dest.$set(0, next);
@@ -33,9 +33,10 @@ export namespace Iterators {
     // inspired by: https://dev.to/chrismilson/zip-iterator-in-typescript-ldm
     type Iterableify<T> = { [K in keyof T]: Iterable<T[K]> }
 
-    export function* zip<const T extends readonly Iterable<any>[]>(
-        iterables: Tie<T>
-    ): IterableIterator<Iterable<T extends Iterable<infer U> ? U : never>> {
+    export function* zip<const I extends readonly any[]>(
+        iterables: Tie<Iterableify<I>>,
+        dest: $TupleList<I>,
+    ): IterableIterator<TupleList<I>> {
         // const iters = iterables.map(i => i[Symbol.iterator]());
 
         // generator: while(true) {
@@ -56,15 +57,14 @@ export namespace Iterators {
         }
 
         let done = false;
-        const yieldTuple = TupleList.With(new Array(iterators.length) as unknown as Tie<unknown[]>);
         generator: while (!done) {
             for (let i = 0; i < iterators.length; i++) {
                 const iterator = iterators.at(i, undefined)!;
                 const result = iterator.next();
                 if (result.done) break generator;
-                yieldTuple.$set(i as never, result.value);
+                dest.$set(i as Indices<I>, result.value);
             }
-            yield yieldTuple as TupleList<T>;
+            yield dest;
         }
 
     }
@@ -78,28 +78,7 @@ export namespace Iterators {
         }
     }
 
-    export function* fallback<T>(iterable: Iterable<T>): IterableIterator<
-        { done: false, value: T } | { done: true, value: undefined }
-    > {
-        for (const next of iterable) {
-            yield {
-                done: false,
-                value: next,
-            };
-        }
-
-        yield {
-            done: true,
-            value: undefined,
-        };
-    }
-
-    /** This operation make a copy of all elements in the given iterable, so it may be slow */
-    export function* reverse<T>(iterable: Iterable<T>): IterableIterator<T> {
-        yield* [...iterable].reverse();
-    }
-
-    export function* chain<T>(...iterables: Iterable<T>[]): IterableIterator<T> {
+    export function* chain<T>(iterables: Span<Iterable<T>>): IterableIterator<T> {
         for (const iterable of iterables) {
             yield* iterable;
         }
