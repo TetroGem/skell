@@ -70,17 +70,19 @@ export namespace Numbers {
         }
 
         export function parseInt(source: string): $$Result<number, NotAnIntCause | NaNCause> {
+            type Cause = NotAnIntCause | NaNCause;
             const parsed = Number.parseFloat(source);
-            if (Number.isNaN(parsed)) return Bad(NaNCause.Def);
-            if (!Number.isInteger(parsed)) return Bad(NotAnIntCause.Def);
+            if (Number.isNaN(parsed)) return Bad<Cause>(NaNCause.Def);
+            if (!Number.isInteger(parsed)) return Bad<Cause>(NotAnIntCause.Def);
             return Ok(parsed);
         }
 
         export function parseSafeInt(source: string): $$Result<number, NotASafeIntCause | NotAnIntCause | NaNCause> {
+            type Cause = NotASafeIntCause | NotAnIntCause | NaNCause;
             const parsed = Number.parseFloat(source);
-            if (Number.isNaN(parsed)) return Bad(NaNCause.Def);
-            if (!Number.isInteger(parsed)) return Bad(NotAnIntCause.Def);
-            if (!Number.isSafeInteger(parsed)) return Bad(NotASafeIntCause.Def);
+            if (Number.isNaN(parsed)) return Bad<Cause>(NaNCause.Def);
+            if (!Number.isInteger(parsed)) return Bad<Cause>(NotAnIntCause.Def);
+            if (!Number.isSafeInteger(parsed)) return Bad<Cause>(NotASafeIntCause.Def);
             return Ok(parsed);
         }
 

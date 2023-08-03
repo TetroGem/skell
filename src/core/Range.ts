@@ -3,83 +3,83 @@ import { Skell, Readable, Mutable, Owned } from './skell';
 
 class _Range extends Skell<typeof Range> {
     public constructor(
-        private _min: number,
-        private _minIsInclusive: boolean,
-        private _max: number,
-        private _maxIsInclusive: boolean,
+        private _start: number,
+        private _startIsInclusive: boolean,
+        private _end: number,
+        private _endIsInclusive: boolean,
         private _step: number,
     ) {
         super(Range.KIND);
     }
 
-    get min(): number {
-        return this._min;
+    get start(): number {
+        return this._start;
     }
 
-    get max(): number {
-        return this._max;
+    get end(): number {
+        return this._end;
     }
 
     get step(): number {
         return this._step;
     }
 
-    get minIsInclusive(): boolean {
-        return this._minIsInclusive
+    get startIsInclusive(): boolean {
+        return this._startIsInclusive
     }
 
-    get maxIsInclusive(): boolean {
-        return this._maxIsInclusive;
+    get endIsInclusive(): boolean {
+        return this._endIsInclusive;
     }
 
-    public $inMin(min: number): this {
-        this._min = min;
-        this._minIsInclusive = true;
+    public $inStart(start: number): this {
+        this._start = start;
+        this._startIsInclusive = true;
         return this;
     }
 
-    public $exMin(min: number): this {
-        this._min = min;
-        this._minIsInclusive = false;
+    public $exStart(start: number): this {
+        this._start = start;
+        this._startIsInclusive = false;
         return this;
     }
 
-    public $inMax(max: number): this {
-        this._max = max;
-        this._maxIsInclusive = true;
+    public $inEnd(end: number): this {
+        this._end = end;
+        this._endIsInclusive = true;
         return this;
     }
 
-    public $exMax(max: number): this {
-        this._max = max;
-        this._maxIsInclusive = false;
+    public $exEnd(end: number): this {
+        this._end = end;
+        this._endIsInclusive = false;
         return this;
     }
 
-    public $inIn(inclusiveMin: number, inclusiveMax: number, step?: number): this {
-        this.$inMin(inclusiveMin);
-        this.$inMax(inclusiveMax);
+    public $inIn(inclusiveStart: number, inclusiveEnd: number, step?: number): this {
+        this.$inStart(inclusiveStart);
+        this.$inEnd(inclusiveEnd);
         if (step !== undefined) this.$step(step);
         return this;
     }
 
-    public $exEx(exclusiveMin: number, exclusiveMax: number, step?: number): this {
-        this.$exMin(exclusiveMin);
-        this.$exMax(exclusiveMax);
+    public $exEx(exclusiveStart: number, exclusiveEnd: number, step?: number): this {
+        this.$exStart(exclusiveStart);
+        this.$exEnd(exclusiveEnd);
         if (step !== undefined) this.$step(step);
         return this;
     }
 
-    public $inEx(inclusiveMin: number, exclusiveMax: number, step?: number): this {
-        this.$inMin(inclusiveMin);
-        this.$exMax(exclusiveMax);
+    public $inEx(inclusiveStart: number, exclusiveEnd: number, step?: number): this {
+        this.$inStart(inclusiveStart);
+        this.$exEnd(exclusiveEnd);
         if (step !== undefined) this.$step(step);
         return this;
     }
 
-    public $exIn(exclusiveMin: number, inclusiveMax: number, step?: number): this {
-        this.$exMin(exclusiveMin);
-        this.$inMax(inclusiveMax);
+    public $exIn(exclusiveStart: number, inclusiveEnd: number, step?: number): this {
+        this.$exStart(exclusiveStart);
+        this.$inEnd(inclusiveEnd);
         if (step !== undefined) this.$step(step);
         return this;
     }
@@ -90,16 +90,16 @@ class _Range extends Skell<typeof Range> {
     }
 
     get first(): number {
-        return this.minIsInclusive ? this.min : this.min + this.step;
+        return this.startIsInclusive ? this.start : this.start + this.step;
     }
 
     get last(): number {
-        const range = this.max - this.min;
+        const range = this.end - this.start;
         const remainder = Numbers.Quick.safeModulo(range, this.step, null);
 
         return remainder === null
-            ? this.min
-            : this.max - (remainder === 0 ? this.maxIsInclusive ? 0 : this.step : remainder)
+            ? this.start
+            : this.end - (remainder === 0 ? this.endIsInclusive ? 0 : this.step : remainder)
             ;
     }
 
@@ -143,19 +143,19 @@ export namespace Range {
         return new _Range(0, true, 1, false, 1);
     }
 
-    export function InIn(inclusiveMin: number, inclusiveMax: number, step?: number): $$Range {
-        return New().$inIn(inclusiveMin, inclusiveMax, step);
+    export function InIn(inclusiveStart: number, inclusiveEnd: number, step?: number): $$Range {
+        return New().$inIn(inclusiveStart, inclusiveEnd, step);
     }
 
-    export function ExEx(exclusiveMin: number, exclusiveMax: number, step?: number): $$Range {
-        return New().$exEx(exclusiveMin, exclusiveMax, step);
+    export function ExEx(exclusiveStart: number, exclusiveEnd: number, step?: number): $$Range {
+        return New().$exEx(exclusiveStart, exclusiveEnd, step);
     }
 
-    export function InEx(inclusiveMin: number, exclusiveMax: number, step?: number): $$Range {
-        return New().$inEx(inclusiveMin, exclusiveMax, step);
+    export function InEx(inclusiveStart: number, exclusiveEnd: number, step?: number): $$Range {
+        return New().$inEx(inclusiveStart, exclusiveEnd, step);
     }
 
-    export function ExIn(exclusiveMin: number, inclusiveMax: number, step?: number): $$Range {
-        return New().$exIn(exclusiveMin, inclusiveMax, step);
+    export function ExIn(exclusiveStart: number, inclusiveEnd: number, step?: number): $$Range {
+        return New().$exIn(exclusiveStart, inclusiveEnd, step);
     }
 }

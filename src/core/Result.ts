@@ -75,7 +75,7 @@ export namespace Result {
 
         export function With(): $$Bad<void>;
         export function With<T>(value: T): $$Bad<T>;
-        export function With<T>(value?: T): $$Bad<T | void> {
+        export function With<T>(value: T = undefined as never): $$Bad<T | never> {
             return new _Bad(value);
         }
     }
